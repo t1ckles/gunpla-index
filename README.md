@@ -4,7 +4,7 @@ A dark, high-contrast hangar for cataloging GunPla and Mobile Suit model kits. T
 
 ## Features
 
-- **Spreadsheet-first catalog** — `npm run parse-excel` turns the Excel file into `src/data/models.json`
+- **JSON catalog** — edit `src/data/models.json` by hand, or regenerate it from Excel with `npm run parse-excel`
 - **Collection dashboard** with live search, grade / series / status filters, and animated kit cards
 - **Kit modal** with image gallery, statistics, lore, and personal build notes
 - **Manage page** to add, edit, and delete kits
@@ -19,7 +19,7 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173). The Excel parser runs automatically before `dev` and `build`.
+Open [http://localhost:5173](http://localhost:5173). Edit `src/data/models.json` directly; `dev` and `build` will not overwrite it. Run `npm run parse-excel` only when you want to regenerate JSON from the spreadsheet.
 
 ## Spreadsheet columns
 
@@ -41,9 +41,9 @@ Kits from the sheet default to **Backlog** until you update them on `/manage`.
 
 | Command | Purpose |
 | --- | --- |
-| `npm run parse-excel` | Convert the spreadsheet into `src/data/models.json` |
-| `npm run dev` | Parse, then start Vite |
-| `npm run build` | Parse, typecheck, and emit `dist/` |
+| `npm run parse-excel` | Overwrite `src/data/models.json` from the spreadsheet tabs |
+| `npm run dev` | Start Vite without touching `models.json` |
+| `npm run build` | Typecheck and emit `dist/` / `assets/` without touching `models.json` |
 | `npm run preview` | Preview the static build |
 | `npm run deploy` | Build for GitHub Pages and publish `dist/` with `gh-pages` |
 
