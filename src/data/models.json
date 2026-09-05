@@ -432,7 +432,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Gundam%20Legilis.png"
+    ],
     "releaseYear": 2012,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -469,7 +471,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Gundam%20Age-FX.png"
+    ],
     "releaseYear": 2012,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -505,7 +509,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Gundam%20G-Self%20Atmospheric%20Pack.png"
+    ],
     "releaseYear": 2014,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -541,7 +547,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Strike%20Rouge%20IWSP%20Gundam.png"
+    ],
     "releaseYear": 2004,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -577,7 +585,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Gundam%20Astray%20Blue%20Frame.png"
+    ],
     "releaseYear": 2004,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -613,7 +623,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Gundam%20Full%20Armor%20Thunderbolt%20Ver.png"
+    ],
     "releaseYear": 2013,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -649,7 +661,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Wing%20Gundam%20Zero.png"
+    ],
     "releaseYear": 2014,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -686,7 +700,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Gundam%20Heavyarms.png"
+    ],
     "releaseYear": 2020,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -723,7 +739,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Gundam%20Shenlong.png"
+    ],
     "releaseYear": 2022,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -760,7 +778,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Leo.png"
+    ],
     "releaseYear": 2018,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -797,7 +817,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Strike%20Freedom%20Gundam.png"
+    ],
     "releaseYear": 2016,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -834,7 +856,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Gundam%20GQuuuuux.png"
+    ],
     "releaseYear": 2024,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -868,7 +892,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Gundam%20Barbatos.png"
+    ],
     "releaseYear": 2015,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -904,7 +930,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Gundam%20Crossbone%20X1.png"
+    ],
     "releaseYear": 2014,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -941,7 +969,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/RGM-79%20GM.png"
+    ],
     "releaseYear": 2001,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -977,7 +1007,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Gundam%20RX-78-2%20Revive.png"
+    ],
     "releaseYear": 2015,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -1013,7 +1045,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Gundam%20GP01%20Zephyranthes.png"
+    ],
     "releaseYear": 2000,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -1049,7 +1083,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Gundam%20GP01%20Full%20Burnern.png"
+    ],
     "releaseYear": 2001,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -1085,7 +1121,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Gundam%20GP03S%20Stamen.png"
+    ],
     "releaseYear": 2001,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -1121,7 +1159,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/RGM-79%20C.png"
+    ],
     "releaseYear": 2010,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -1157,7 +1197,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Gundam%20F91.png"
+    ],
     "releaseYear": 2013,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -1193,7 +1235,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Gundam%20Unicorn%20Destroy%20Mode.png"
+    ],
     "releaseYear": 2009,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -1228,7 +1272,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Jegan%20ECOAS.png"
+    ],
     "releaseYear": 2011,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -1265,7 +1311,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Gouf%20Custom.png"
+    ],
     "releaseYear": 2010,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -1301,7 +1349,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/RX-79%20G%20Ground%20Type.png"
+    ],
     "releaseYear": 2018,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -1337,7 +1387,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Assault%20Buster%20Gundam.png"
+    ],
     "releaseYear": 2015,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -1374,7 +1426,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Gundam%20Mk-II%20Titans.png"
+    ],
     "releaseYear": 2015,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -1411,7 +1465,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Gundam%20EX.png"
+    ],
     "releaseYear": 2024,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -1447,7 +1503,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Chuchus%20Demi%20Trainer.png"
+    ],
     "releaseYear": 2022,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -1482,7 +1540,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Gundam%20Lfrith%20Thorn.png"
+    ],
     "releaseYear": 2023,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -1517,7 +1577,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Demi%20Trainer.png"
+    ],
     "releaseYear": 2022,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -1552,7 +1614,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Zowort.png"
+    ],
     "releaseYear": 2023,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -1587,7 +1651,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Gundam%20Aerial%20Rebuild.png"
+    ],
     "releaseYear": 2023,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -1623,7 +1689,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Gundam%20Schwarzette.png"
+    ],
     "releaseYear": 2023,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -1657,7 +1725,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Demi%20Barding.png"
+    ],
     "releaseYear": 2023,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -1692,7 +1762,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Gundam%20Calibarn.png"
+    ],
     "releaseYear": 2023,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -1727,7 +1799,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Gundam%20RX-78-2%20Ver%203.png"
+    ],
     "releaseYear": 2013,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -1764,7 +1838,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Gundam%20Exia.png"
+    ],
     "releaseYear": 2009,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -1801,7 +1877,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Gundam%20GP01%20Zephyranthes%20Ver%202.png"
+    ],
     "releaseYear": 1997,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -1837,7 +1915,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Gundam%20F91%20Ver%202.png"
+    ],
     "releaseYear": 2018,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -1873,7 +1953,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Tallgeese.png"
+    ],
     "releaseYear": 2013,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -1908,7 +1990,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/RX-79%20G%20Ground%20Type%20Ver%202.png"
+    ],
     "releaseYear": 2000,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -1944,7 +2028,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/RX-79%20G%20Ez-9.png"
+    ],
     "releaseYear": 2000,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -1981,7 +2067,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/RGM-79%20G.png"
+    ],
     "releaseYear": 2001,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -2018,7 +2106,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Aile%20Strike%20Gundam.png"
+    ],
     "releaseYear": 2011,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -2054,7 +2144,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Gundam%20GP01%20Zephyranthes.png"
+    ],
     "releaseYear": 2013,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -2090,7 +2182,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Wing%20Gundam.png"
+    ],
     "releaseYear": 2021,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -2128,7 +2222,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Gundam%20Mk-II%20AEUG.png"
+    ],
     "releaseYear": 2012,
     "purchaseDate": "",
     "purchasePrice": null,
@@ -2165,7 +2261,9 @@
     "customPaint": false,
     "mods": "",
     "notes": "",
-    "images": [],
+    "images": [
+      "./kits/Gundam%20RX-93%20v.png"
+    ],
     "releaseYear": 2022,
     "purchaseDate": "",
     "purchasePrice": null,

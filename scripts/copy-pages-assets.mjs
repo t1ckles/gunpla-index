@@ -16,4 +16,11 @@ if (existsSync(faviconSrc)) {
   cpSync(faviconSrc, resolve("favicon.svg"));
 }
 
-console.log("Copied dist/assets → assets/ for GitHub Pages (main branch root).");
+const distKits = resolve("dist/kits");
+const destKits = resolve("kits");
+rmSync(destKits, { recursive: true, force: true });
+if (existsSync(distKits)) {
+  cpSync(distKits, destKits, { recursive: true });
+}
+
+console.log("Copied dist/assets → assets/ and dist/kits → kits/ for GitHub Pages.");
