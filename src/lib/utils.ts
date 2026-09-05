@@ -104,6 +104,60 @@ export function getKitTheme(kit: Pick<Kit, "series" | "timeline">) {
   );
 }
 
+export function kitIdentityKey(kit: Pick<Kit, "catalogNumber" | "unitCode" | "kitName">) {
+  return [kit.catalogNumber, kit.unitCode, kit.kitName]
+    .map((value) => value.trim().toLowerCase())
+    .join("|");
+}
+
+export function inferTimeline(series: string, timeline = "") {
+  if (timeline.trim()) return timeline.trim();
+
+  const exact: Record<string, string> = {
+    "Mobile Suit Gundam": "Universal Century (UC)",
+    "Mobile Suit Zeta Gundam": "Universal Century (UC)",
+    "Mobile Suit Gundam 0083: Stardust Memory": "Universal Century (UC)",
+    "Mobile Suit Gundam 0083": "Universal Century (UC)",
+    "Mobile Suit Gundam: The 08th MS Team": "Universal Century (UC)",
+    "Mobile Suit Gundam F91": "Universal Century (UC)",
+    "Mobile Suit Gundam UC": "Universal Century (UC)",
+    "Mobile Suit Victory Gundam": "Universal Century (UC)",
+    "Mobile Suit Gundam Wing": "After Colony (AC)",
+    "Mobile Suit Gundam Wing: Endless Waltz": "After Colony (AC)",
+    "Mobile Suit Gundam Wing: EW": "After Colony (AC)",
+    "Mobile Suit Gundam SEED": "Cosmic Era (CE)",
+    "Mobile Suit Gundam SEED DESTINY": "Cosmic Era (CE)",
+    "Mobile Suit Gundam 00": "Anno Domini (AD)",
+    "Mobile Suit Gundam IRON-BLOODED ORPHANS": "Post Disaster (PD)",
+    "IRON-BLOODED ORPHANS": "Post Disaster (PD)",
+    "Mobile Suit Gundam: The Witch from Mercury": "Ad Stella (AS)",
+    "The Witch from Mercury": "Ad Stella (AS)",
+    "Mobile Suit Gundam: Requiem for Vengeance": "Universal Century (UC)",
+    "Requiem for Vengeance": "Universal Century (UC)",
+  };
+  if (exact[series]) return exact[series];
+
+  const haystack = series.toLowerCase();
+  if (haystack.includes("witch from mercury")) return "Ad Stella (AS)";
+  if (haystack.includes("wing")) return "After Colony (AC)";
+  if (haystack.includes("seed")) return "Cosmic Era (CE)";
+  if (haystack.includes("iron-blooded") || haystack.includes("orphans")) {
+    return "Post Disaster (PD)";
+  }
+  if (haystack.includes("macross")) return "Macross";
+  if (haystack.includes("star wars")) return "Star Wars Universe";
+  if (haystack.includes("armored core")) return "Rubicon 3";
+  if (haystack.includes("30 minutes")) return "30MM Universe";
+  if (
+    haystack.includes("gundam") ||
+    haystack.includes("zeta") ||
+    haystack.includes("unicorn")
+  ) {
+    return "Universal Century (UC)";
+  }
+  return "";
+}
+
 export function slugify(value: string) {
   return (
     value
@@ -135,6 +189,11 @@ const SERIES_SHORT_NAMES: Record<string, string> = {
   "Gundam Reconguista in G": "Reconguista in G",
   "IRON-BLOODED ORPHANS": "Iron-Blooded Orphans",
   "The Witch from Mercury": "Witch from Mercury",
+  "Mobile Suit Gundam: The Witch from Mercury": "Witch from Mercury",
+  "Mobile Suit Gundam 0083: Stardust Memory": "0083",
+  "Mobile Suit Gundam Wing: Endless Waltz": "Wing: Endless Waltz",
+  "Mobile Suit Gundam IRON-BLOODED ORPHANS": "Iron-Blooded Orphans",
+  "Mobile Suit Gundam: Requiem for Vengeance": "Requiem for Vengeance",
   "Mobile Suit Gundam GQuuuuuuX": "GQuuuuuuX",
   "Mobile Suit Gundam AGE": "Gundam AGE",
   "Requiem for Vengeance": "Requiem for Vengeance",

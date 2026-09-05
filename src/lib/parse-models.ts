@@ -8,7 +8,7 @@ import {
   type KitLore,
   type Scale,
 } from "./types";
-import { emptyLore, slugify } from "./utils";
+import { emptyLore, inferTimeline, slugify } from "./utils";
 
 const HEADER_ALIASES: Record<string, string> = {
   "grade / line": "gradeLine",
@@ -214,7 +214,7 @@ export function rowToKit(
   const unitCode = mapped.unitCode;
   const catalogNumber = mapped.catalogNumber;
   const series = mapped.series;
-  const timeline = mapped.timeline;
+  const timeline = inferTimeline(series, mapped.timeline);
   const stamp = cell(raw.createdAt) || (source === "excel" ? "2024-01-01T00:00:00.000Z" : nowIso());
   const lore: KitLore = {
     ...emptyLore(),

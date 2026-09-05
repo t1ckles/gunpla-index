@@ -140,6 +140,11 @@ export const FRANCHISE_THEMES: Record<
     to: "#1e1b4b",
     glow: "rgba(244,114,182,0.4)",
   },
+  "Mobile Suit Gundam: The Witch from Mercury": {
+    from: "#9d174d",
+    to: "#1e1b4b",
+    glow: "rgba(244,114,182,0.4)",
+  },
   "Mobile Suit Gundam GQuuuuuuX": {
     from: "#991b1b",
     to: "#111827",

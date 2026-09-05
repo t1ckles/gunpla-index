@@ -1,5 +1,6 @@
 import { STORAGE_KEY } from "./constants";
 import type { CollectionExport, CustomList, Kit, LocalCollection } from "./types";
+import { kitIdentityKey } from "./utils";
 
 function isKit(value: unknown): value is Kit {
   if (!value || typeof value !== "object") return false;
@@ -57,13 +58,58 @@ function asLocal(value: unknown): LocalCollection | null {
   return null;
 }
 
-export function mergeSeedKits(local: LocalCollection, seed: Kit[]): Kit[] {
-  const known = new Set(local.knownSeedIds);
-  const localIds = new Set(local.kits.map((kit) => kit.id));
-  const additions = seed.filter(
-    (kit) => !localIds.has(kit.id) && !known.has(kit.id),
+function hasUserContent(kit: Kit) {
+  return Boolean(
+    kit.notes ||
+      kit.mods ||
+      kit.customPaint ||
+      kit.images.length ||
+      kit.lore.background ||
+      kit.lore.manufacturer ||
+      kit.lore.pilot ||
+      kit.purchaseDate ||
+      kit.purchasePrice != null ||
+      kit.releaseYear != null ||
+      kit.buildStatus !== "Backlog",
   );
-  return [...local.kits, ...additions];
+}
+
+export function mergeSeedKits(local: LocalCollection, seed: Kit[]): Kit[] {
+  const localById = new Map(local.kits.map((kit) => [kit.id, kit]));
+  const localByIdentity = new Map(
+    local.kits.map((kit) => [kitIdentityKey(kit), kit]),
+  );
+  const matchedLocalIds = new Set<string>();
+
+  const merged = seed.map((seedKit) => {
+    const localKit =
+      localById.get(seedKit.id) ?? localByIdentity.get(kitIdentityKey(seedKit));
+    if (!localKit) return seedKit;
+    matchedLocalIds.add(localKit.id);
+    if (!hasUserContent(localKit)) return seedKit;
+    return {
+      ...seedKit,
+      buildStatus: localKit.buildStatus,
+      customPaint: localKit.customPaint,
+      mods: localKit.mods,
+      notes: localKit.notes,
+      images: localKit.images.length ? localKit.images : seedKit.images,
+      releaseYear: localKit.releaseYear ?? seedKit.releaseYear,
+      purchaseDate: localKit.purchaseDate || seedKit.purchaseDate,
+      purchasePrice: localKit.purchasePrice ?? seedKit.purchasePrice,
+      lore: localKit.lore.background || localKit.lore.manufacturer
+        ? localKit.lore
+        : seedKit.lore,
+      createdAt: localKit.createdAt,
+      updatedAt: localKit.updatedAt,
+    };
+  });
+
+  const userAdded = local.kits.filter(
+    (kit) => kit.source === "user" && !matchedLocalIds.has(kit.id),
+  );
+
+  return [...merged, ...userAdded];
 }
 
 export function loadCollection(seed: Kit[]): LocalCollection {
@@ -82,12 +128,30 @@ export function loadCollection(seed: Kit[]): LocalCollection {
       return emptyState(seed);
     }
 
-    const knownSeedIds = [...new Set([...parsed.knownSeedIds, ...seed.map((kit) => kit.id)])];
+    const kits = mergeSeedKits(parsed, seed);
+    const validIds = new Set(kits.map((kit) => kit.id));
+    const seedByIdentity = new Map(seed.map((kit) => [kitIdentityKey(kit), kit]));
+    const lists = parsed.lists.map((list) => ({
+      ...list,
+      kitIds: [
+        ...new Set(
+          list.kitIds
+            .map((id) => {
+              if (validIds.has(id)) return id;
+              const previous = parsed.kits.find((kit) => kit.id === id);
+              if (!previous) return null;
+              return seedByIdentity.get(kitIdentityKey(previous))?.id ?? null;
+            })
+            .filter((id): id is string => Boolean(id)),
+        ),
+      ],
+    }));
+
     return {
       version: 3,
-      kits: mergeSeedKits(parsed, seed),
-      knownSeedIds,
-      lists: parsed.lists,
+      kits,
+      knownSeedIds: seed.map((kit) => kit.id),
+      lists,
     };
   } catch {
     return emptyState(seed);
