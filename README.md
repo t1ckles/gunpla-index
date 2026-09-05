@@ -10,7 +10,7 @@ A dark, high-contrast hangar for cataloging GunPla and Mobile Suit model kits. T
 - **Manage page** to add, edit, and delete kits
 - **JSON / CSV / Excel import & export**
 - **localStorage merge** — browser edits persist, and new spreadsheet rows appear on the next rebuild
-- **GitHub Pages ready** — static `dist` output plus a deploy workflow
+- **GitHub Pages ready** — production assets are copied to `assets/` so the `main` branch root can host the site
 
 ## Getting started
 
@@ -49,13 +49,16 @@ Kits from the sheet default to **Backlog** until you update them on `/manage`.
 
 ## GitHub Pages
 
-1. Enable **GitHub Pages** for the repo and set the source to **GitHub Actions**.
-2. Push to `main`. The workflow builds with `GITHUB_PAGES=true` so asset paths use `/{repo}/` (this repo: `/gunpla-index/`).
-3. The app uses hash routing (`/#/manage`), so collection links work on project pages without a custom 404 rewrite.
+GitHub Pages is serving the `main` branch root. A Vite source file cannot run there, so `npm run build` also copies the compiled bundle to `assets/` at the repo root.
 
-Manual publish:
+1. In the repo: **Settings → Pages → Deploy from a branch → `main` / `/ (root)`**.
+2. Run `npm run build`, commit the updated `assets/` folder, and push.
+3. The live site loads `./assets/app.js` instead of `/src/main.tsx`.
+
+Hash routes (`/#/manage`) work on project pages without a custom 404 rewrite.
 
 ```bash
+npm run build
 npm run deploy
 ```
 

@@ -8,9 +8,9 @@
     "predev": "npm run parse-excel",
     "dev": "vite",
     "prebuild": "npm run parse-excel",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && node scripts/copy-pages-assets.mjs",
     "preview": "vite preview",
-    "deploy": "cross-env GITHUB_PAGES=true npm run build && gh-pages -d dist"
+    "deploy": "npm run build && gh-pages -d dist"
   },
   "dependencies": {
     "clsx": "^2.1.1",

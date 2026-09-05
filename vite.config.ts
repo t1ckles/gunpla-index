@@ -3,11 +3,10 @@ import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
-const repoName = process.env.GITHUB_REPOSITORY?.split("/")[1] ?? "gunpla-index";
-
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: process.env.GITHUB_PAGES === "true" ? `/${repoName}/` : "./",
+  // Relative paths work on GitHub project pages and local preview.
+  base: "./",
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
@@ -16,5 +15,13 @@ export default defineConfig({
   build: {
     outDir: "dist",
     emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        entryFileNames: "assets/app.js",
+        chunkFileNames: "assets/[name].js",
+        assetFileNames: (info) =>
+          info.name?.endsWith(".css") ? "assets/index.css" : "assets/[name][extname]",
+      },
+    },
   },
 });
