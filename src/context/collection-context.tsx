@@ -87,6 +87,7 @@ interface CollectionContextValue {
   setKitStatus: (id: string, status: BuildStatus) => void;
   deleteKit: (id: string) => void;
   importKits: (incoming: Kit[], mode: "merge" | "replace") => void;
+  clearUploadedKits: () => number;
   resetToSpreadsheet: () => void;
   createList: (name: string) => CustomList | null;
   toggleKitInList: (listId: string, kitId: string) => void;
@@ -144,6 +145,14 @@ export function CollectionProvider({ children }: { children: ReactNode }) {
   const importKits = useCallback((incoming: Kit[], mode: "merge" | "replace") => {
     const current = hydrateFromStorage();
     writeKits(mode === "replace" ? incoming : mergeKits(current.kits, incoming));
+  }, []);
+
+  const clearUploadedKits = useCallback(() => {
+    const current = hydrateFromStorage().kits;
+    const remaining = current.filter((kit) => kit.source !== "user");
+    const removed = current.length - remaining.length;
+    if (removed) writeKits(remaining);
+    return removed;
   }, []);
 
   const resetToSpreadsheet = useCallback(() => {
@@ -226,6 +235,7 @@ export function CollectionProvider({ children }: { children: ReactNode }) {
       setKitStatus,
       deleteKit,
       importKits,
+      clearUploadedKits,
       resetToSpreadsheet,
       createList,
       toggleKitInList,
@@ -241,6 +251,7 @@ export function CollectionProvider({ children }: { children: ReactNode }) {
       setKitStatus,
       deleteKit,
       importKits,
+      clearUploadedKits,
       resetToSpreadsheet,
       createList,
       toggleKitInList,

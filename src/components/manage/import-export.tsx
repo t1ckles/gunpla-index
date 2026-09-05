@@ -1,5 +1,5 @@
-import { FileJson, FileSpreadsheet, RotateCcw, Upload } from "lucide-react";
-import { useRef, useState } from "react";
+import { Eraser, FileJson, FileSpreadsheet, RotateCcw, Upload } from "lucide-react";
+import { useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useCollection } from "@/context/collection-context";
 import {
@@ -12,10 +12,28 @@ import {
 } from "@/lib/import-export";
 
 export function ImportExport() {
-  const { kits, importKits, resetToSpreadsheet } = useCollection();
+  const { kits, importKits, clearUploadedKits, resetToSpreadsheet } = useCollection();
   const fileRef = useRef<HTMLInputElement>(null);
   const [message, setMessage] = useState("");
   const [mode, setMode] = useState<"merge" | "replace">("merge");
+  const uploadedCount = useMemo(
+    () => kits.filter((kit) => kit.source === "user").length,
+    [kits],
+  );
+
+  function handleClearUploaded() {
+    const noun = uploadedCount === 1 ? "kit" : "kits";
+    const confirmed = window.confirm(
+      `Remove ${uploadedCount} uploaded ${noun} from this browser? Spreadsheet catalog kits and your status or notes on those stay.`,
+    );
+    if (!confirmed) return;
+    const removed = clearUploadedKits();
+    setMessage(
+      removed
+        ? `Removed ${removed} uploaded ${removed === 1 ? "kit" : "kits"} from this browser.`
+        : "No uploaded kits to remove.",
+    );
+  }
 
   async function handleFile(file: File) {
     try {
@@ -45,8 +63,8 @@ export function ImportExport() {
         <h2 className="font-display text-2xl text-white">Bulk Import / Export</h2>
         <p className="mt-1 text-sm leading-6 text-zinc-400">
           Export the live hangar as JSON or CSV, or import an updated spreadsheet.
-          New Excel rows merge in on the next rebuild; browser edits stay in
-          localStorage until you reset.
+          Kits you add here or import live in localStorage. Clear uploaded kits
+          to drop those only; reset wipes every browser change.
         </p>
       </div>
 
@@ -75,6 +93,16 @@ export function ImportExport() {
         <Button onClick={() => fileRef.current?.click()}>
           <Upload className="size-4" />
           Import File
+        </Button>
+        <Button
+          onClick={handleClearUploaded}
+          variant="danger"
+          disabled={!uploadedCount}
+        >
+          <Eraser className="size-4" />
+          {uploadedCount
+            ? `Clear ${uploadedCount} uploaded ${uploadedCount === 1 ? "kit" : "kits"}`
+            : "Clear uploaded kits"}
         </Button>
         <Button onClick={resetToSpreadsheet} variant="ghost">
           <RotateCcw className="size-4" />

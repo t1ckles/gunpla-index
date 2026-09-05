@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Pencil, Trash2 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ImportExport } from "@/components/manage/import-export";
 import { KitForm } from "@/components/manage/kit-form";
 import { GradeBadge } from "@/components/ui/grade-badge";
@@ -14,6 +14,12 @@ export function ManagePage() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const editing = kits.find((kit) => kit.id === editingId) ?? null;
+
+  useEffect(() => {
+    if (editingId && !kits.some((kit) => kit.id === editingId)) {
+      setEditingId(null);
+    }
+  }, [editingId, kits]);
 
   const filtered = useMemo(() => {
     const value = query.trim().toLowerCase();
@@ -53,7 +59,8 @@ export function ManagePage() {
         </h1>
         <p className="mt-2 max-w-2xl text-sm leading-6 text-zinc-400">
           Log a new purchase, update a finished build, or sync the hangar back
-          out as JSON / CSV. Spreadsheet kits stay until you delete or reset them.
+          out as JSON / CSV. Uploaded kits are tagged in the inventory and can
+          be cleared from this browser without touching the spreadsheet catalog.
         </p>
       </motion.div>
 
@@ -95,7 +102,14 @@ export function ManagePage() {
               className="grid gap-3 border-b border-white/5 px-4 py-4 last:border-b-0 md:grid-cols-[1.4fr_0.7fr_0.5fr_0.8fr_auto] md:items-center"
             >
               <div>
-                <p className="font-medium text-white">{kit.kitName}</p>
+                <div className="flex flex-wrap items-center gap-2">
+                  <p className="font-medium text-white">{kit.kitName}</p>
+                  {kit.source === "user" ? (
+                    <span className="rounded-full border border-amber-300/30 bg-amber-400/10 px-2 py-0.5 text-[10px] uppercase tracking-wider text-amber-100">
+                      Uploaded
+                    </span>
+                  ) : null}
+                </div>
                 <p className="font-mono text-xs tracking-[0.16em] text-cyan-300">
                   {kit.unitCode || "—"}
                 </p>
