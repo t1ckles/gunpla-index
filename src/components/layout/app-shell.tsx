@@ -1,12 +1,8 @@
-import { AnimatePresence, motion } from "framer-motion";
 import type { ReactNode } from "react";
-import { useLocation } from "react-router-dom";
 import { CollectionProvider } from "@/context/collection-context";
 import { Navbar } from "./navbar";
 
 export function AppShell({ children }: { children: ReactNode }) {
-  const location = useLocation();
-
   return (
     <CollectionProvider>
       <div className="relative flex min-h-full flex-1 flex-col overflow-x-hidden">
@@ -14,17 +10,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <div className="grid-overlay pointer-events-none absolute inset-0 opacity-40" />
         <Navbar />
         <main className="relative z-10 mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={location.pathname}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.22, ease: "easeOut" }}
-            >
-              {children}
-            </motion.div>
-          </AnimatePresence>
+          {children}
         </main>
         <footer className="relative z-10 border-t border-white/5 px-4 py-6 text-center text-xs uppercase tracking-[0.2em] text-zinc-600">
           MS-Index · Personal GunPla archive · Spreadsheet + local data

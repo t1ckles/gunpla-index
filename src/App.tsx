@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { AppShell } from "@/components/layout/app-shell";
 import { CatalogPage } from "@/pages/catalog-page";
 import { ManagePage } from "@/pages/manage-page";
@@ -9,7 +9,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<CatalogPage />} />
         <Route path="/manage" element={<ManagePage />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<CatalogPage />} />
       </Routes>
     </AppShell>
   );
