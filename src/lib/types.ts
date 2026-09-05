@@ -88,16 +88,27 @@ export interface CollectionExport {
   kits: Kit[];
 }
 
+export interface CustomList {
+  id: string;
+  name: string;
+  kitIds: string[];
+  createdAt: string;
+}
+
 export interface LocalCollection {
-  version: 2;
+  version: 3;
   kits: Kit[];
   knownSeedIds: string[];
+  lists: CustomList[];
 }
 
 export interface CollectionFilters {
   query: string;
   grades: Grade[];
   series: string[];
+  seriesQuery: string;
+  timelines: string[];
   statuses: BuildStatus[];
+  listIds: string[];
   sort: SortOption;
 }

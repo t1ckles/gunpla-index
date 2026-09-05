@@ -8,16 +8,23 @@ import {
 } from "react";
 import { seedKits } from "@/data/seed";
 import { mergeKits } from "@/lib/import-export";
-import { clearCollection, loadCollection, saveCollection } from "@/lib/storage";
-import type { Kit, KitInput, LocalCollection } from "@/lib/types";
+import { loadCollection, saveCollection } from "@/lib/storage";
+import type {
+  BuildStatus,
+  CustomList,
+  Kit,
+  KitInput,
+  LocalCollection,
+} from "@/lib/types";
 import { createId } from "@/lib/utils";
 
 type Listener = () => void;
 
 const seedState: LocalCollection = {
-  version: 2,
+  version: 3,
   kits: seedKits,
   knownSeedIds: seedKits.map((kit) => kit.id),
+  lists: [],
 };
 
 let snapshot = seedState;
@@ -58,21 +65,33 @@ function writeState(next: LocalCollection) {
 
 function writeKits(kits: Kit[]) {
   const current = hydrateFromStorage();
+  const remaining = new Set(kits.map((kit) => kit.id));
   writeState({
     ...current,
+    version: 3,
     kits,
     knownSeedIds: [...new Set([...current.knownSeedIds, ...seedKits.map((kit) => kit.id)])],
+    lists: current.lists.map((list) => ({
+      ...list,
+      kitIds: list.kitIds.filter((id) => remaining.has(id)),
+    })),
   });
 }
 
 interface CollectionContextValue {
   kits: Kit[];
+  lists: CustomList[];
   ready: boolean;
   addKit: (input: KitInput) => Kit;
   updateKit: (id: string, input: KitInput) => void;
+  setKitStatus: (id: string, status: BuildStatus) => void;
   deleteKit: (id: string) => void;
   importKits: (incoming: Kit[], mode: "merge" | "replace") => void;
   resetToSpreadsheet: () => void;
+  createList: (name: string) => CustomList | null;
+  toggleKitInList: (listId: string, kitId: string) => void;
+  clearList: (listId: string) => void;
+  deleteList: (listId: string) => void;
 }
 
 const CollectionContext = createContext<CollectionContextValue | null>(null);
@@ -108,6 +127,16 @@ export function CollectionProvider({ children }: { children: ReactNode }) {
     );
   }, []);
 
+  const setKitStatus = useCallback((id: string, status: BuildStatus) => {
+    writeKits(
+      hydrateFromStorage().kits.map((kit) =>
+        kit.id === id
+          ? { ...kit, buildStatus: status, updatedAt: new Date().toISOString() }
+          : kit,
+      ),
+    );
+  }, []);
+
   const deleteKit = useCallback((id: string) => {
     writeKits(hydrateFromStorage().kits.filter((kit) => kit.id !== id));
   }, []);
@@ -118,25 +147,106 @@ export function CollectionProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const resetToSpreadsheet = useCallback(() => {
-    clearCollection();
+    const current = hydrateFromStorage();
+    const seedIds = new Set(seedKits.map((kit) => kit.id));
     writeState({
-      version: 2,
+      version: 3,
       kits: seedKits,
       knownSeedIds: seedKits.map((kit) => kit.id),
+      lists: current.lists.map((list) => ({
+        ...list,
+        kitIds: list.kitIds.filter((id) => seedIds.has(id)),
+      })),
+    });
+  }, []);
+
+  const createList = useCallback((name: string) => {
+    const trimmed = name.trim();
+    if (!trimmed) return null;
+    const current = hydrateFromStorage();
+    const list: CustomList = {
+      id: createId(),
+      name: trimmed,
+      kitIds: [],
+      createdAt: new Date().toISOString(),
+    };
+    writeState({
+      ...current,
+      version: 3,
+      lists: [...current.lists, list],
+    });
+    return list;
+  }, []);
+
+  const toggleKitInList = useCallback((listId: string, kitId: string) => {
+    const current = hydrateFromStorage();
+    writeState({
+      ...current,
+      version: 3,
+      lists: current.lists.map((list) => {
+        if (list.id !== listId) return list;
+        const hasKit = list.kitIds.includes(kitId);
+        return {
+          ...list,
+          kitIds: hasKit
+            ? list.kitIds.filter((id) => id !== kitId)
+            : [...list.kitIds, kitId],
+        };
+      }),
+    });
+  }, []);
+
+  const clearList = useCallback((listId: string) => {
+    const current = hydrateFromStorage();
+    writeState({
+      ...current,
+      version: 3,
+      lists: current.lists.map((list) =>
+        list.id === listId ? { ...list, kitIds: [] } : list,
+      ),
+    });
+  }, []);
+
+  const deleteList = useCallback((listId: string) => {
+    const current = hydrateFromStorage();
+    writeState({
+      ...current,
+      version: 3,
+      lists: current.lists.filter((list) => list.id !== listId),
     });
   }, []);
 
   const value = useMemo(
     () => ({
       kits: state.kits,
+      lists: state.lists,
       ready,
       addKit,
       updateKit,
+      setKitStatus,
       deleteKit,
       importKits,
       resetToSpreadsheet,
+      createList,
+      toggleKitInList,
+      clearList,
+      deleteList,
     }),
-    [state.kits, ready, addKit, updateKit, deleteKit, importKits, resetToSpreadsheet],
+    [
+      state.kits,
+      state.lists,
+      ready,
+      addKit,
+      updateKit,
+      setKitStatus,
+      deleteKit,
+      importKits,
+      resetToSpreadsheet,
+      createList,
+      toggleKitInList,
+      clearList,
+      deleteList,
+    ],
   );
 
   return (

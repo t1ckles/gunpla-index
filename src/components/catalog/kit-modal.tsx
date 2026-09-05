@@ -13,18 +13,24 @@ import {
 } from "lucide-react";
 import { useEffect, type ComponentType } from "react";
 import { GradeBadge } from "@/components/ui/grade-badge";
-import { StatusBadge } from "@/components/ui/status-badge";
+import { StatusSelect } from "@/components/ui/status-select";
 import { Button } from "@/components/ui/button";
-import type { Kit } from "@/lib/types";
-import { formatCurrency, formatDate } from "@/lib/utils";
+import type { BuildStatus, CustomList, Kit } from "@/lib/types";
+import { cn, formatCurrency, formatDate } from "@/lib/utils";
 import { ImageGallery } from "./image-gallery";
 
 export function KitModal({
   kit,
+  lists,
   onClose,
+  onStatusChange,
+  onToggleList,
 }: {
   kit: Kit | null;
+  lists: CustomList[];
   onClose: () => void;
+  onStatusChange: (status: BuildStatus) => void;
+  onToggleList: (listId: string) => void;
 }) {
   useEffect(() => {
     if (!kit) return;
@@ -87,12 +93,53 @@ export function KitModal({
 
               <div className="space-y-5">
                 <div className="flex flex-wrap gap-2">
-                  <GradeBadge grade={kit.grade} code={kit.gradeCode} showFullName />
+                  <GradeBadge grade={kit.grade} code={kit.gradeCode} />
                   <span className="rounded-md border border-white/10 bg-white/5 px-2.5 py-1 font-mono text-xs text-zinc-200">
                     {kit.scale}
                   </span>
-                  <StatusBadge status={kit.buildStatus} />
                 </div>
+
+                <section className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                  <h3 className="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-zinc-300">
+                    Build status
+                  </h3>
+                  <StatusSelect value={kit.buildStatus} onChange={onStatusChange} />
+                  <p className="mt-2 text-xs text-zinc-500">
+                    Changes save to this browser immediately.
+                  </p>
+                </section>
+
+                <section className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                  <h3 className="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-zinc-300">
+                    Custom lists
+                  </h3>
+                  {lists.length === 0 ? (
+                    <p className="text-sm text-zinc-500">
+                      Create a list in the hangar filters, then assign this kit here.
+                    </p>
+                  ) : (
+                    <div className="flex flex-wrap gap-2">
+                      {lists.map((list) => {
+                        const active = list.kitIds.includes(kit.id);
+                        return (
+                          <button
+                            key={list.id}
+                            type="button"
+                            onClick={() => onToggleList(list.id)}
+                            className={cn(
+                              "rounded-full border px-3 py-1 text-xs uppercase tracking-wider",
+                              active
+                                ? "border-amber-300/40 bg-amber-400/15 text-amber-100"
+                                : "border-white/10 bg-white/5 text-zinc-300 hover:border-white/20",
+                            )}
+                          >
+                            {list.name}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </section>
 
                 <section className="grid grid-cols-2 gap-3">
                   <Stat icon={Hash} label="Catalog" value={kit.catalogNumber || "—"} />

@@ -1,5 +1,5 @@
 import { STORAGE_KEY } from "./constants";
-import type { CollectionExport, Kit, LocalCollection } from "./types";
+import type { CollectionExport, CustomList, Kit, LocalCollection } from "./types";
 
 function isKit(value: unknown): value is Kit {
   if (!value || typeof value !== "object") return false;
@@ -13,13 +13,28 @@ function isKit(value: unknown): value is Kit {
   );
 }
 
+function isList(value: unknown): value is CustomList {
+  if (!value || typeof value !== "object") return false;
+  const list = value as Partial<CustomList>;
+  return (
+    typeof list.id === "string" &&
+    typeof list.name === "string" &&
+    Array.isArray(list.kitIds)
+  );
+}
+
+function emptyState(kits: Kit[]): LocalCollection {
+  return {
+    version: 3,
+    kits,
+    knownSeedIds: kits.map((kit) => kit.id),
+    lists: [],
+  };
+}
+
 function asLocal(value: unknown): LocalCollection | null {
   if (Array.isArray(value) && value.every(isKit)) {
-    return {
-      version: 2,
-      kits: value,
-      knownSeedIds: value.map((kit) => kit.id),
-    };
+    return emptyState(value);
   }
 
   if (value && typeof value === "object") {
@@ -31,7 +46,11 @@ function asLocal(value: unknown): LocalCollection | null {
               (id): id is string => typeof id === "string",
             )
           : kits.map((kit) => kit.id);
-      return { version: 2, kits, knownSeedIds };
+      const lists =
+        "lists" in value && Array.isArray((value as LocalCollection).lists)
+          ? (value as LocalCollection).lists.filter(isList)
+          : [];
+      return { version: 3, kits, knownSeedIds, lists };
     }
   }
 
@@ -49,44 +68,29 @@ export function mergeSeedKits(local: LocalCollection, seed: Kit[]): Kit[] {
 
 export function loadCollection(seed: Kit[]): LocalCollection {
   if (typeof window === "undefined") {
-    return {
-      version: 2,
-      kits: seed,
-      knownSeedIds: seed.map((kit) => kit.id),
-    };
+    return emptyState(seed);
   }
 
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (!raw) {
-      return {
-        version: 2,
-        kits: seed,
-        knownSeedIds: seed.map((kit) => kit.id),
-      };
+      return emptyState(seed);
     }
 
     const parsed = asLocal(JSON.parse(raw) as unknown);
     if (!parsed) {
-      return {
-        version: 2,
-        kits: seed,
-        knownSeedIds: seed.map((kit) => kit.id),
-      };
+      return emptyState(seed);
     }
 
     const knownSeedIds = [...new Set([...parsed.knownSeedIds, ...seed.map((kit) => kit.id)])];
     return {
-      version: 2,
+      version: 3,
       kits: mergeSeedKits(parsed, seed),
       knownSeedIds,
+      lists: parsed.lists,
     };
   } catch {
-    return {
-      version: 2,
-      kits: seed,
-      knownSeedIds: seed.map((kit) => kit.id),
-    };
+    return emptyState(seed);
   }
 }
 

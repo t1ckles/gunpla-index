@@ -33,35 +33,75 @@ export function KitThumbnail({
         <div className="absolute inset-0">
           <svg
             viewBox="0 0 200 240"
-            className="absolute inset-0 size-full opacity-80"
+            className="absolute inset-0 size-full opacity-90"
             aria-hidden
           >
+            <defs>
+              <pattern
+                id={`hangar-grid-${kit.id}`}
+                width="16"
+                height="16"
+                patternUnits="userSpaceOnUse"
+              >
+                <path
+                  d="M16 0 H0 V16"
+                  fill="none"
+                  stroke="rgba(255,255,255,0.08)"
+                  strokeWidth="1"
+                />
+              </pattern>
+            </defs>
+            <rect width="200" height="240" fill={`url(#hangar-grid-${kit.id})`} />
             <path
-              d="M100 28 L132 58 L148 118 L132 168 L100 208 L68 168 L52 118 L68 58 Z"
+              d="M20 210 L100 170 L180 210"
               fill="none"
-              stroke="rgba(255,255,255,0.55)"
-              strokeWidth="2"
+              stroke="rgba(255,255,255,0.16)"
+              strokeWidth="1"
             />
             <path
-              d="M100 52 L118 72 L126 118 L118 156 L100 182 L82 156 L74 118 L82 72 Z"
-              fill="rgba(255,255,255,0.08)"
+              d="M40 210 L100 182 L160 210"
+              fill="none"
+              stroke="rgba(255,255,255,0.1)"
+              strokeWidth="1"
+            />
+            <rect
+              x="58"
+              y="118"
+              width="84"
+              height="52"
+              rx="3"
+              fill="rgba(9,9,11,0.45)"
               stroke="rgba(255,255,255,0.35)"
               strokeWidth="1.5"
             />
-            <circle cx="100" cy="108" r="10" fill="rgba(34,211,238,0.7)" />
             <path
-              d="M52 118 H20 M148 118 H180 M100 208 V232"
-              stroke="rgba(255,255,255,0.25)"
+              d="M70 118 V108 H130 V118"
+              fill="none"
+              stroke="rgba(255,255,255,0.28)"
+              strokeWidth="1.5"
+            />
+            <rect x="66" y="128" width="68" height="8" fill="rgba(34,211,238,0.18)" />
+            <rect x="74" y="144" width="20" height="12" fill="rgba(255,255,255,0.08)" />
+            <rect x="106" y="144" width="20" height="12" fill="rgba(255,255,255,0.08)" />
+            <path
+              d="M24 28 H48 M24 28 V52 M152 28 H176 M176 28 V52 M24 188 V212 H48 M176 188 V212 H152"
+              fill="none"
+              stroke="rgba(34,211,238,0.45)"
               strokeWidth="1.5"
             />
           </svg>
-          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-            <p className="font-mono text-lg tracking-[0.18em] text-white">
+          <div className="absolute inset-x-0 top-6 px-5 text-center">
+            <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-cyan-200/80">
+              Hangar slot
+            </p>
+            <p className="mt-2 font-mono text-lg tracking-[0.14em] text-white">
               {kit.unitCode || "NO CODE"}
             </p>
-            <p className="mt-1 flex items-center gap-1 text-[10px] uppercase tracking-[0.2em] text-zinc-300">
+          </div>
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent p-4">
+            <p className="flex items-center gap-1 text-[10px] uppercase tracking-[0.2em] text-zinc-300">
               <ImageOff className="size-3" />
-              Add box art URL
+              Awaiting box art
             </p>
           </div>
         </div>

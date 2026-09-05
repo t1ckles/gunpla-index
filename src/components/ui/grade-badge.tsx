@@ -18,35 +18,40 @@ const tones: Record<Grade, string> = {
 export function GradeBadge({
   grade,
   code,
-  showFullName = false,
+  compact = false,
   className,
 }: {
   grade: Grade;
   code?: string;
-  showFullName?: boolean;
+  compact?: boolean;
   className?: string;
 }) {
   const meta = GRADE_META[grade];
-  const label = code && code !== "Other" ? code : grade;
+  const codeLabel = code && code !== "Other" ? code : grade;
+  const label =
+    grade === "Other" && (!code || code === "Other")
+      ? "Other Line"
+      : `${meta.fullName} (${codeLabel})`;
 
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-md border px-2 py-1 font-mono text-[11px] font-bold tracking-wider",
+        "inline-flex items-center gap-1.5 rounded-md border font-semibold tracking-wide",
+        compact ? "px-1.5 py-0.5 text-[10px]" : "px-2.5 py-1 text-[11px]",
         tones[grade],
         className,
       )}
-      title={meta.fullName}
+      title={label}
     >
-      <span className="grid size-3.5 place-items-center rounded-[2px] border border-current/50 text-[8px]">
+      <span
+        className={cn(
+          "grid place-items-center rounded-[2px] border border-current/50 font-mono",
+          compact ? "size-3 text-[7px]" : "size-3.5 text-[8px]",
+        )}
+      >
         {meta.label.slice(0, 1)}
       </span>
-      {label}
-      {showFullName ? (
-        <span className="font-sans font-medium tracking-normal text-current/80">
-          {meta.fullName}
-        </span>
-      ) : null}
+      <span className="font-sans">{label}</span>
     </span>
   );
 }

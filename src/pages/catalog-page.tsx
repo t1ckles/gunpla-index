@@ -3,6 +3,8 @@ import { Search, SlidersHorizontal } from "lucide-react";
 import { useMemo, useState, type ReactNode } from "react";
 import { KitCard } from "@/components/catalog/kit-card";
 import { KitModal } from "@/components/catalog/kit-modal";
+import { ListsPanel } from "@/components/catalog/lists-panel";
+import { SeriesFilter } from "@/components/catalog/series-filter";
 import { GradeBadge } from "@/components/ui/grade-badge";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { useCollection } from "@/context/collection-context";
@@ -13,27 +15,39 @@ import {
   type BuildStatus,
   type CollectionFilters,
   type Grade,
-  type Kit,
   type SortOption,
 } from "@/lib/types";
-import { cn, sortKits, uniqueValues } from "@/lib/utils";
+import { cn, sortKits } from "@/lib/utils";
 
 const initialFilters: CollectionFilters = {
   query: "",
   grades: [],
   series: [],
+  seriesQuery: "",
+  timelines: [],
   statuses: [],
+  listIds: [],
   sort: "alphabetical",
 };
 
 export function CatalogPage() {
-  const { kits, ready } = useCollection();
+  const {
+    kits,
+    lists,
+    ready,
+    setKitStatus,
+    createList,
+    toggleKitInList,
+    clearList,
+    deleteList,
+  } = useCollection();
   const [filters, setFilters] = useState<CollectionFilters>(initialFilters);
-  const [selected, setSelected] = useState<Kit | null>(null);
-  const seriesOptions = useMemo(() => uniqueValues(kits, "series"), [kits]);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const selected = kits.find((kit) => kit.id === selectedId) ?? null;
 
   const visible = useMemo(() => {
     const query = filters.query.trim().toLowerCase();
+    const seriesQuery = filters.seriesQuery.trim().toLowerCase();
     const filtered = kits.filter((kit) => {
       const matchesQuery =
         !query ||
@@ -50,17 +64,34 @@ export function CatalogPage() {
           .join(" ")
           .toLowerCase()
           .includes(query);
+      const matchesSeriesSearch =
+        !seriesQuery ||
+        kit.series.toLowerCase().includes(seriesQuery) ||
+        kit.timeline.toLowerCase().includes(seriesQuery);
       const matchesGrade =
         filters.grades.length === 0 || filters.grades.includes(kit.grade);
-      const matchesSeries =
-        filters.series.length === 0 || filters.series.includes(kit.series);
+      const matchesTimeline =
+        filters.timelines.length === 0 ||
+        filters.timelines.includes(kit.timeline);
       const matchesStatus =
         filters.statuses.length === 0 ||
         filters.statuses.includes(kit.buildStatus);
-      return matchesQuery && matchesGrade && matchesSeries && matchesStatus;
+      const matchesLists =
+        filters.listIds.length === 0 ||
+        filters.listIds.some((listId) =>
+          lists.find((list) => list.id === listId)?.kitIds.includes(kit.id),
+        );
+      return (
+        matchesQuery &&
+        matchesSeriesSearch &&
+        matchesGrade &&
+        matchesTimeline &&
+        matchesStatus &&
+        matchesLists
+      );
     });
     return sortKits(filtered, filters.sort);
-  }, [filters, kits]);
+  }, [filters, kits, lists]);
 
   function toggleValue<T>(list: T[], value: T) {
     return list.includes(value)
@@ -85,8 +116,8 @@ export function CatalogPage() {
             </h1>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-zinc-400">
               Live catalog from <span className="text-zinc-200">GunPla Models.xlsx</span>.
-              Filter by grade, series, or build status — badges use icons so status
-              stays readable beyond color.
+              Set build status and custom lists on each card — both stay in this
+              browser until you clear them.
             </p>
           </div>
           <p className="font-mono text-sm text-zinc-500">
@@ -128,7 +159,7 @@ export function CatalogPage() {
             </label>
           </div>
 
-          <div className="mt-4 space-y-3">
+          <div className="mt-5 space-y-5">
             <FilterRow label="Grade">
               {GRADES.map((grade) => (
                 <button
@@ -173,31 +204,46 @@ export function CatalogPage() {
                 </button>
               ))}
             </FilterRow>
-            <FilterRow label="Series">
-              {seriesOptions.map((series) => {
-                const active = filters.series.includes(series);
-                return (
-                  <button
-                    key={series}
-                    type="button"
-                    onClick={() =>
-                      setFilters((current) => ({
-                        ...current,
-                        series: toggleValue(current.series, series),
-                      }))
-                    }
-                    className={cn(
-                      "rounded-full border px-3 py-1 text-xs uppercase tracking-[0.12em] transition-colors",
-                      active
-                        ? "border-cyan-300/50 bg-cyan-400/10 text-cyan-100"
-                        : "border-white/10 bg-white/5 text-zinc-300 hover:border-white/20",
-                    )}
-                  >
-                    {series}
-                  </button>
-                );
-              })}
-            </FilterRow>
+            <ListsPanel
+              lists={lists}
+              selectedListIds={filters.listIds}
+              onToggleList={(listId) =>
+                setFilters((current) => ({
+                  ...current,
+                  listIds: toggleValue(current.listIds, listId),
+                }))
+              }
+              onCreate={createList}
+              onClear={clearList}
+              onDelete={(listId) => {
+                deleteList(listId);
+                setFilters((current) => ({
+                  ...current,
+                  listIds: current.listIds.filter((id) => id !== listId),
+                }));
+              }}
+            />
+            <SeriesFilter
+              kits={kits}
+              seriesQuery={filters.seriesQuery}
+              selectedTimelines={filters.timelines}
+              onSeriesQueryChange={(seriesQuery) =>
+                setFilters((current) => ({ ...current, seriesQuery }))
+              }
+              onToggleTimeline={(timeline) =>
+                setFilters((current) => ({
+                  ...current,
+                  timelines: toggleValue(current.timelines, timeline),
+                }))
+              }
+              onClear={() =>
+                setFilters((current) => ({
+                  ...current,
+                  seriesQuery: "",
+                  timelines: [],
+                }))
+              }
+            />
           </div>
         </div>
       </motion.section>
@@ -205,7 +251,14 @@ export function CatalogPage() {
       <motion.section layout className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
         <AnimatePresence mode="popLayout">
           {visible.map((kit) => (
-            <KitCard key={kit.id} kit={kit} onSelect={setSelected} />
+            <KitCard
+              key={kit.id}
+              kit={kit}
+              lists={lists}
+              onSelect={(next) => setSelectedId(next.id)}
+              onStatusChange={(status) => setKitStatus(kit.id, status)}
+              onToggleList={(listId) => toggleKitInList(listId, kit.id)}
+            />
           ))}
         </AnimatePresence>
       </motion.section>
@@ -216,7 +269,17 @@ export function CatalogPage() {
         </div>
       ) : null}
 
-      <KitModal kit={selected} onClose={() => setSelected(null)} />
+      <KitModal
+        kit={selected}
+        lists={lists}
+        onClose={() => setSelectedId(null)}
+        onStatusChange={(status) => {
+          if (selected) setKitStatus(selected.id, status);
+        }}
+        onToggleList={(listId) => {
+          if (selected) toggleKitInList(listId, selected.id);
+        }}
+      />
     </div>
   );
 }
