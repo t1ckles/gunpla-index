@@ -87,30 +87,30 @@ function cell(value: unknown) {
   return String(value).trim();
 }
 
-function asGrade(value: string): Grade {
+function asGrade(value = ""): Grade {
   const match = GRADES.find(
     (grade) => grade.toLowerCase() === value.trim().toLowerCase(),
   );
   return match ?? "Other";
 }
 
-function asScale(value: string): Scale {
+function asScale(value = ""): Scale {
   const match = SCALES.find((scale) => scale === value.trim());
   return match ?? "1/144";
 }
 
-function asStatus(value: string): BuildStatus {
+function asStatus(value = ""): BuildStatus {
   const match = BUILD_STATUSES.find(
     (status) => status.toLowerCase() === value.trim().toLowerCase(),
   );
   return match ?? "Backlog";
 }
 
-function asBoolean(value: string) {
+function asBoolean(value = "") {
   return /^(true|yes|y|1|painted|custom)$/i.test(value.trim());
 }
 
-function asNumber(value: string) {
+function asNumber(value = "") {
   const cleaned = value.replace(/[^0-9.]/g, "");
   if (!cleaned) return null;
   const parsed = Number(cleaned);
@@ -215,7 +215,7 @@ export function rowToKit(
   const catalogNumber = mapped.catalogNumber;
   const series = mapped.series;
   const timeline = mapped.timeline;
-  const stamp = nowIso();
+  const stamp = cell(raw.createdAt) || (source === "excel" ? "2024-01-01T00:00:00.000Z" : nowIso());
   const lore: KitLore = {
     ...emptyLore(),
     manufacturer: mapped.manufacturer ?? "",
@@ -259,7 +259,7 @@ export function rowToKit(
     purchasePrice: asNumber(mapped.purchasePrice ?? ""),
     lore,
     source,
-    createdAt: cell(raw.createdAt) || stamp,
+    createdAt: stamp,
     updatedAt: cell(raw.updatedAt) || stamp,
   };
 }

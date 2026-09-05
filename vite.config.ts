@@ -3,7 +3,7 @@ import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
-const repoName = process.env.GITHUB_REPOSITORY?.split("/")[1] ?? "gundpla-index";
+const repoName = process.env.GITHUB_REPOSITORY?.split("/")[1] ?? "gunpla-index";
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],

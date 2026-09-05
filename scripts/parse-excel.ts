@@ -1,4 +1,4 @@
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import * as XLSX from "xlsx";
@@ -8,7 +8,10 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const workbookPath = resolve(root, "src/GunPla Models.xlsx");
 const outputPath = resolve(root, "src/data/models.json");
 
-const workbook = XLSX.readFile(workbookPath, { cellDates: true });
+const workbook = XLSX.read(readFileSync(workbookPath), {
+  type: "buffer",
+  cellDates: true,
+});
 const sheetName = workbook.SheetNames[0];
 
 if (!sheetName) {
