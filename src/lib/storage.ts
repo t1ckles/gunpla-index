@@ -91,15 +91,11 @@ export function mergeSeedKits(local: LocalCollection, seed: Kit[]): Kit[] {
       ...seedKit,
       buildStatus: localKit.buildStatus,
       customPaint: localKit.customPaint,
-      mods: localKit.mods,
-      notes: localKit.notes,
+      mods: localKit.mods || seedKit.mods,
+      notes: localKit.notes || seedKit.notes,
       images: localKit.images.length ? localKit.images : seedKit.images,
-      releaseYear: localKit.releaseYear ?? seedKit.releaseYear,
       purchaseDate: localKit.purchaseDate || seedKit.purchaseDate,
       purchasePrice: localKit.purchasePrice ?? seedKit.purchasePrice,
-      lore: localKit.lore.background || localKit.lore.manufacturer
-        ? localKit.lore
-        : seedKit.lore,
       createdAt: localKit.createdAt,
       updatedAt: localKit.updatedAt,
     };
