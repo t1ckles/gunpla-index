@@ -6,13 +6,21 @@ export function KitThumbnail({
   kit,
   src,
   className,
+  variant = "card",
 }: {
   kit: Kit;
   src?: string;
   className?: string;
+  variant?: "card" | "gallery" | "thumb";
 }) {
   const theme = getKitTheme(kit);
   const image = src ?? kit.images[0];
+  const frame =
+    variant === "gallery"
+      ? "px-8 py-6"
+      : variant === "thumb"
+        ? "p-1.5"
+        : "px-5 pt-10 pb-[5.75rem]";
 
   return (
     <div
@@ -26,7 +34,10 @@ export function KitThumbnail({
         <img
           src={image}
           alt={`${kit.kitName} thumbnail`}
-          className="absolute inset-0 size-full object-cover"
+          className={cn(
+            "absolute inset-0 size-full object-contain object-center",
+            frame,
+          )}
           loading="lazy"
         />
       ) : (

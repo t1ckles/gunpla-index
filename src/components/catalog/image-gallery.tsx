@@ -24,6 +24,7 @@ export function ImageGallery({ kit }: { kit: Kit }) {
             <KitThumbnail
               kit={kit}
               src={current || undefined}
+              variant="gallery"
               className="aspect-[16/11]"
             />
           </motion.div>
@@ -64,7 +65,12 @@ export function ImageGallery({ kit }: { kit: Kit }) {
                   : "border-white/10 opacity-70 hover:opacity-100"
               }`}
             >
-              <KitThumbnail kit={kit} src={src || undefined} className="size-full" />
+              <KitThumbnail
+                kit={kit}
+                src={src || undefined}
+                variant="thumb"
+                className="size-full"
+              />
             </button>
           ))}
         </div>
