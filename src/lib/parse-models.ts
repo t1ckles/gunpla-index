@@ -18,6 +18,7 @@ const HEADER_ALIASES: Record<string, string> = {
   "box / catalog": "catalogNumber",
   "catalog #": "catalogNumber",
   catalog: "catalogNumber",
+  box: "catalogNumber",
   "model number / designation": "unitCode",
   "model / unit designation": "unitCode",
   "unit model number": "unitCode",
@@ -186,11 +187,21 @@ function nowIso() {
   return new Date().toISOString();
 }
 
+function looksLikeTimeline(value: string) {
+  return /universal century|after colony|cosmic era|anno domini|post disaster|ad stella|advanced generation|regild century|rubicon|30mm universe|macross|star wars|\((uc|ac|ce|ad|pd|as|ag|rc|ew)\)/i.test(
+    value,
+  );
+}
+
 export function mapRow(raw: Record<string, unknown>): Record<string, string> {
   const mapped: Record<string, string> = {};
   for (const [header, value] of Object.entries(raw)) {
     const key = HEADER_ALIASES[normalizeHeader(header)];
     if (key) mapped[key] = cell(value);
+  }
+  if (!mapped.timeline) {
+    const untitled = cell(raw.__EMPTY);
+    if (looksLikeTimeline(untitled)) mapped.timeline = untitled;
   }
   return mapped;
 }

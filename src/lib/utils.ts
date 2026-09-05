@@ -111,7 +111,13 @@ export function kitIdentityKey(kit: Pick<Kit, "catalogNumber" | "unitCode" | "ki
 }
 
 export function inferTimeline(series: string, timeline = "") {
-  if (timeline.trim()) return timeline.trim();
+  const explicit = timeline.trim();
+  if (explicit) {
+    if (/gundam wing/i.test(series) && /cosmic era/i.test(explicit)) {
+      return "After Colony (AC)";
+    }
+    return explicit;
+  }
 
   const exact: Record<string, string> = {
     "Mobile Suit Gundam": "Universal Century (UC)",
@@ -134,11 +140,18 @@ export function inferTimeline(series: string, timeline = "") {
     "The Witch from Mercury": "Ad Stella (AS)",
     "Mobile Suit Gundam: Requiem for Vengeance": "Universal Century (UC)",
     "Requiem for Vengeance": "Universal Century (UC)",
+    "Mobile Suit Gundam: Char's Counterattack": "Universal Century (UC)",
+    "Mobile Suit Gundam AGE": "Advanced Generation (AG)",
+    "Gundam Reconguista in G": "Regild Century (RC)",
+    "Mobile Suit Gundam GQuuuuuuX": "Universal Century (Alternate)",
   };
   if (exact[series]) return exact[series];
 
   const haystack = series.toLowerCase();
   if (haystack.includes("witch from mercury")) return "Ad Stella (AS)";
+  if (haystack.includes("gquuuuux")) return "Universal Century (Alternate)";
+  if (haystack.includes("reconguista")) return "Regild Century (RC)";
+  if (/\bage\b/.test(haystack)) return "Advanced Generation (AG)";
   if (haystack.includes("wing")) return "After Colony (AC)";
   if (haystack.includes("seed")) return "Cosmic Era (CE)";
   if (haystack.includes("iron-blooded") || haystack.includes("orphans")) {
@@ -196,6 +209,7 @@ const SERIES_SHORT_NAMES: Record<string, string> = {
   "Mobile Suit Gundam: Requiem for Vengeance": "Requiem for Vengeance",
   "Mobile Suit Gundam GQuuuuuuX": "GQuuuuuuX",
   "Mobile Suit Gundam AGE": "Gundam AGE",
+  "Mobile Suit Gundam: Char's Counterattack": "Char's Counterattack",
   "Requiem for Vengeance": "Requiem for Vengeance",
   "Armored Core VI: Fires of Rubicon": "Armored Core VI",
   "30 Minutes Missions": "30 Minutes Missions",
