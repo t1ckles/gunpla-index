@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Search, SlidersHorizontal } from "lucide-react";
-import { useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { HangarPagination } from "@/components/catalog/hangar-pagination";
 import { KitCard } from "@/components/catalog/kit-card";
 import { KitModal } from "@/components/catalog/kit-modal";
 import { ListsPanel } from "@/components/catalog/lists-panel";
@@ -30,6 +31,8 @@ const initialFilters: CollectionFilters = {
   sort: "alphabetical",
 };
 
+const PAGE_SIZE = 9;
+
 export function CatalogPage() {
   const {
     kits,
@@ -42,6 +45,7 @@ export function CatalogPage() {
     deleteList,
   } = useCollection();
   const [filters, setFilters] = useState<CollectionFilters>(initialFilters);
+  const [page, setPage] = useState(1);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const selected = kits.find((kit) => kit.id === selectedId) ?? null;
 
@@ -93,6 +97,25 @@ export function CatalogPage() {
     return sortKits(filtered, filters.sort);
   }, [filters, kits, lists]);
 
+  const pageCount = Math.max(1, Math.ceil(visible.length / PAGE_SIZE));
+  const currentPage = Math.min(page, pageCount);
+  const pageKits = visible.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE,
+  );
+
+  useEffect(() => {
+    setPage(1);
+  }, [filters]);
+
+  function goToPage(next: number) {
+    setPage(Math.min(pageCount, Math.max(1, next)));
+    document.getElementById("hangar-grid")?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }
+
   function toggleValue<T>(list: T[], value: T) {
     return list.includes(value)
       ? list.filter((item) => item !== value)
@@ -114,11 +137,6 @@ export function CatalogPage() {
             <h1 className="mt-2 font-display text-4xl tracking-[0.12em] text-white sm:text-5xl">
               HANGAR BAY
             </h1>
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-zinc-400">
-              Live catalog from <span className="text-zinc-200">GunPla Models.xlsx</span>.
-              Set build status and custom lists on each card — both stay in this
-              browser until you clear them.
-            </p>
           </div>
           <p className="font-mono text-sm text-zinc-500">
             {ready ? `${visible.length} / ${kits.length} displayed` : "Loading archive…"}
@@ -248,20 +266,47 @@ export function CatalogPage() {
         </div>
       </motion.section>
 
-      <motion.section layout className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-        <AnimatePresence mode="popLayout">
-          {visible.map((kit) => (
-            <KitCard
-              key={kit.id}
-              kit={kit}
-              lists={lists}
-              onSelect={(next) => setSelectedId(next.id)}
-              onStatusChange={(status) => setKitStatus(kit.id, status)}
-              onToggleList={(listId) => toggleKitInList(listId, kit.id)}
+      {visible.length > 0 ? (
+        <div id="hangar-grid" className="space-y-5">
+          <HangarPagination
+            page={currentPage}
+            pageCount={pageCount}
+            total={visible.length}
+            pageSize={PAGE_SIZE}
+            onPageChange={goToPage}
+          />
+          <AnimatePresence mode="wait">
+            <motion.section
+              key={currentPage}
+              initial={{ opacity: 0, x: 18 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -18 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3"
+            >
+              {pageKits.map((kit) => (
+                <KitCard
+                  key={kit.id}
+                  kit={kit}
+                  lists={lists}
+                  onSelect={(next) => setSelectedId(next.id)}
+                  onStatusChange={(status) => setKitStatus(kit.id, status)}
+                  onToggleList={(listId) => toggleKitInList(listId, kit.id)}
+                />
+              ))}
+            </motion.section>
+          </AnimatePresence>
+          {pageCount > 1 ? (
+            <HangarPagination
+              page={currentPage}
+              pageCount={pageCount}
+              total={visible.length}
+              pageSize={PAGE_SIZE}
+              onPageChange={goToPage}
             />
-          ))}
-        </AnimatePresence>
-      </motion.section>
+          ) : null}
+        </div>
+      ) : null}
 
       {ready && visible.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-white/15 px-6 py-16 text-center text-zinc-400">

@@ -13,7 +13,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           {children}
         </main>
         <footer className="relative z-10 border-t border-white/5 px-4 py-6 text-center text-xs uppercase tracking-[0.2em] text-zinc-600">
-          MS-Index · Personal GunPla archive · Spreadsheet + local data
+          MS-Index · Personal GunPla archive
         </footer>
       </div>
     </CollectionProvider>
